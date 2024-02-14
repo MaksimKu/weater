@@ -1,0 +1,1 @@
+{"version":3,"file":"main.js","mappings":";;;;;AAAAA,OAAO,CAACC,GAAG,CAAC,IAAI,CAAC,C","sources":["webpack://chess-react/./src/index.js"],"sourcesContent":["console.log('ss')"],"names":["console","log"],"sourceRoot":""}
