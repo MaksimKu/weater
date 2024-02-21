@@ -181,7 +181,7 @@ function InputComp(propWeat) {
     console.log(input);
     // let input = 'коломна'
     var res;
-    var response = fetch("http://api.openweathermap.org/geo/1.0/direct?q=".concat(input, "\n        &limit=3&appid=f1deaa43117ff56e72f57110937d2a6a"));
+    var response = fetch("https://api.openweathermap.org/geo/1.0/direct?q=".concat(input, "\n        &limit=3&appid=f1deaa43117ff56e72f57110937d2a6a"));
     response.then(function (response) {
       return response.json();
     }).then(function (va) {

@@ -26,7 +26,7 @@ function InputComp (propWeat) {
         console.log(input)
         // let input = 'коломна'
         let res;
-        let response = fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${input}
+        let response = fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${input}
         &limit=3&appid=f1deaa43117ff56e72f57110937d2a6a`)
             
         response.then(response => response.json())
