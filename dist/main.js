@@ -27,9 +27,9 @@ function DiwWeat(props) {
   var dayThre = null;
   var arr = [];
   if (props.weat) {
-    dayOne = new Date(props.weat.list[0].dt * 1000).getDate();
-    dayTu = new Date(props.weat.list[0].dt * 1000 + 86400000).getDate();
-    dayThre = new Date(props.weat.list[0].dt * 1000 + 2 * 86400000).getDate();
+    dayOne = new Date(props.weat.list[0].dt * 1000);
+    dayTu = new Date(props.weat.list[0].dt * 1000 + 86400000);
+    dayThre = new Date(props.weat.list[0].dt * 1000 + 2 * 86400000);
     console.log(dayOne, dayTu, dayThre);
   }
   var one = [];
@@ -58,13 +58,13 @@ function DiwWeat(props) {
         var item = _step.value;
         var date = new Date(item.dt * 1000);
         switch (date.getDate()) {
-          case dayOne:
+          case dayOne.getDate():
             weat(item, one, date);
             break;
-          case dayTu:
+          case dayTu.getDate():
             weat(item, tu, date);
             break;
-          case dayThre:
+          case dayThre.getDate():
             weat(item, thre, date);
             break;
         }
@@ -123,13 +123,33 @@ function App() {
     _useState2 = _slicedToArray(_useState, 2),
     countWeat = _useState2[0],
     setWeat = _useState2[1];
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: "wrapper"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_inputComp_inputComp__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    weat: [countWeat, setWeat]
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ApiFunction_Api_js__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    weat: countWeat
-  }));
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (localStorage.getItem('cityW')) {
+      fetch("https://api.openweathermap.org/data/2.5/forecast?appid=fe31656328e5d933f2a373caf7e65a95&lat=".concat(localStorage.getItem('latW'), "&lon=").concat(localStorage.getItem('lonW'), "&units=metric")).then(function (response) {
+        return response.json();
+      }).then(function (va) {
+        setWeat(va);
+      });
+    } else {
+      fetch("https://api.openweathermap.org/data/2.5/forecast?appid=fe31656328e5d933f2a373caf7e65a95&lat=55.7504461&lon=37.6174943&units=metric").then(function (response) {
+        return response.json();
+      }).then(function (va) {
+        setWeat(va);
+      });
+    }
+  }, []);
+  if (countWeat) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      className: "wrapper"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_inputComp_inputComp__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      countWeat: countWeat,
+      setWeat: setWeat
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ApiFunction_Api_js__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      weat: countWeat
+    }));
+  } else {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430");
+  }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
 
@@ -156,64 +176,47 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-
-// function searsh (event) {
-//     event.preventDefault()
-//     let input = document.querySelector('.inp').value
-//     console.log(input)
-//     // let input = 'коломна'
-//     let res;
-//     let response = fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${input}
-//     &limit=3&appid=f1deaa43117ff56e72f57110937d2a6a`)
-
-//     response.then(response => response.json())
-//     .then(va=> 
-//         console.log(va)
-//         // setCount(count= va)
-//         )
-//     // .then(setCount(res.forEach(item=> count.push(item))))
-// }
-function InputComp(propWeat) {
-  console.log(propWeat.weat);
-  function searsh(event) {
-    event.preventDefault();
-    var input = document.querySelector('.inp').value;
-    console.log(input);
-    // let input = 'коломна'
-    var res;
-    var response = fetch("https://api.openweathermap.org/geo/1.0/direct?q=".concat(input, "\n        &limit=3&appid=f1deaa43117ff56e72f57110937d2a6a"));
-    response.then(function (response) {
-      return response.json();
-    }).then(function (va) {
-      return (
-        // console.log(va)
-        setCount(count = va)
-      );
-    });
-    // .then(setCount(res.forEach(item=> count.push(item))))
-  }
-  var location = 'Москва';
-  if (localStorage.getItem('weater') !== null) {
-    location = localStorage.getItem('weater');
-  }
+function InputComp(props) {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     count = _useState2[0],
     setCount = _useState2[1];
+  var input = 'Москва';
+  if (localStorage.getItem('cityW')) {
+    input = localStorage.getItem('cityW');
+  }
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(input),
+    _useState4 = _slicedToArray(_useState3, 2),
+    city = _useState4[0],
+    setSity = _useState4[1];
+  function searsh(event) {
+    if (event) {
+      event.preventDefault();
+    }
+    console.log(event.target[0].value);
+    var response = fetch("https://api.openweathermap.org/geo/1.0/direct?q=".concat(event.target[0].value, "\n        &limit=3&appid=f1deaa43117ff56e72f57110937d2a6a"));
+    response.then(function (response) {
+      return response.json();
+    }).then(function (va) {
+      // localStorage.setItem('cityW', input)
+      setCount(va);
+    });
+    document.querySelector('.wrapSity').style.display = 'block';
+  }
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "inpWrapper"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
     onSubmit: searsh
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
     className: "inp",
-    defaultValue: location
+    defaultValue: city
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     type: "submit",
     id: "but"
-    // onClick={searsh(count, setCount)}
   }, "\u043F\u043E\u0438\u0441\u043A")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(LocDiv, {
     loc: count,
-    weat: propWeat.weat
+    weat: props,
+    cityw: setSity
   }));
 }
 function LocDiv(props) {
@@ -229,22 +232,29 @@ function LocDiv(props) {
           response.then(function (response) {
             return response.json();
           }).then(function (va) {
-            return props.weat[1](props.weat[0] = va);
+            localStorage.setItem('latW', item.lat);
+            localStorage.setItem('latW', item.lat);
+            localStorage.setItem('cityW', item.local_names ? item.local_names.ru : item.name);
+            props.weat.setWeat(va);
           });
-          // props.weat[1](props.weat[0] = item);
-          // console.log(props.weat[0])
         }
-      }, item.name + item.country + item.state));
+      }, item.name + ' ' + item.country + ' ' + item.state));
     };
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       _loop();
     }
+    // useEffect()
   } catch (err) {
     _iterator.e(err);
   } finally {
     _iterator.f();
   }
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, arr);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "wrapSity",
+    onClick: function onClick(event) {
+      event.currentTarget.style.display = 'none';
+    }
+  }, arr);
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (InputComp);
 

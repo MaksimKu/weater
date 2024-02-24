@@ -10,9 +10,9 @@ let dayTu = null
 let dayThre = null
 let arr = []
 if (props.weat) {
-    dayOne = new Date(props.weat.list[0].dt * 1000).getDate()
-    dayTu = new Date(props.weat.list[0].dt * 1000 + 86400000).getDate()
-    dayThre = new Date(props.weat.list[0].dt * 1000 + (2*86400000)).getDate()
+    dayOne = new Date(props.weat.list[0].dt * 1000)
+    dayTu = new Date(props.weat.list[0].dt * 1000 + 86400000)
+    dayThre = new Date(props.weat.list[0].dt * 1000 + (2*86400000))
     console.log(dayOne, dayTu, dayThre)
 }
 let one = []
@@ -61,19 +61,20 @@ if (props.weat)
 for (let item of props.weat.list) {
     let date = new Date(item.dt * 1000);
     switch (date.getDate()) {
-        case dayOne:
+        case dayOne.getDate():
             weat(item, one, date)
             break;
-        case dayTu:
+        case dayTu.getDate():
             weat(item, tu, date)
         break;
-        case dayThre:
+        case dayThre.getDate():
             weat(item, thre, date)
         break;
     }
 }
 return (
     <div className="wrapWeat">
+        {/* <p4>Сегодня {dayOne.getDate()} {dayOne.toLocaleString('default', { month: 'long' }).slice(0,  - 1)}</p4> */}
         <div className="day one">
             {<NamePar/>}
             {one}

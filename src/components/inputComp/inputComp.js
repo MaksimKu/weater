@@ -2,80 +2,71 @@ import React, { useState, useEffect } from 'react';
 import './inputStyle.scss';
 
 
-// function searsh (event) {
-//     event.preventDefault()
-//     let input = document.querySelector('.inp').value
-//     console.log(input)
-//     // let input = 'коломна'
-//     let res;
-//     let response = fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${input}
-//     &limit=3&appid=f1deaa43117ff56e72f57110937d2a6a`)
-        
-//     response.then(response => response.json())
-//     .then(va=> 
-//         console.log(va)
-//         // setCount(count= va)
-//         )
-//     // .then(setCount(res.forEach(item=> count.push(item))))
-// }
-function InputComp (propWeat) {
-    console.log(propWeat.weat)
+function InputComp (props) {
+    const [count, setCount] = useState([])
+    let input = 'Москва'
+    if (localStorage.getItem('cityW')) {
+        input = localStorage.getItem('cityW')
+        }
+
+    const [city, setSity] = useState(input)
+
     function searsh (event) {
+        if (event) {
         event.preventDefault()
-        let input = document.querySelector('.inp').value
-        console.log(input)
-        // let input = 'коломна'
-        let res;
-        let response = fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${input}
+        }
+        console.log(event.target[0].value)
+        let response = fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${event.target[0].value}
         &limit=3&appid=f1deaa43117ff56e72f57110937d2a6a`)
             
         response.then(response => response.json())
-        .then(va=> 
-            // console.log(va)
-            setCount(count = va)
-            )
-        // .then(setCount(res.forEach(item=> count.push(item))))
+        .then(va => {
+            // localStorage.setItem('cityW', input)
+            setCount(va)
+            }
+        )
+        document.querySelector('.wrapSity').style.display = 'block'
     }
-
-    let location = 'Москва'
-    if (localStorage.getItem('weater') !== null) {
-        location = localStorage.getItem('weater')
-    }
-    let [count, setCount] = useState([])
 
     return (
         <div className='inpWrapper'>
             <form
             onSubmit={searsh}
             >
-                <input className = 'inp' defaultValue={location}>
+                <input className = 'inp' defaultValue={city}>
                 </input>
                 <button 
                 type='submit'
                 id='but'
-                // onClick={searsh(count, setCount)}
                 >поиск</button>
             </form>
-            <LocDiv loc = {count} weat = {propWeat.weat}></LocDiv>
+            <LocDiv loc = {count} weat = {props} cityw = {setSity}></LocDiv>
         </div>
     )
 }
 
 function LocDiv (props) {
     let arr = []
+    
     for (let item of props.loc) {
         arr.push(<div onClick={
             () =>{
                 let response = fetch(`https://api.openweathermap.org/data/2.5/forecast?appid=fe31656328e5d933f2a373caf7e65a95&lat=${item.lat}&lon=${item.lon}&units=metric`)
                 response.then(response => response.json())
-                .then(va=> props.weat[1](props.weat[0] = va))
-                // props.weat[1](props.weat[0] = item);
-                // console.log(props.weat[0])
+                .then(va=> {
+                    localStorage.setItem('latW', item.lat)
+                    localStorage.setItem('latW', item.lat)
+                    localStorage.setItem('cityW', (item.local_names ? item.local_names.ru : item.name))
+                    props.weat.setWeat(va)
+                })
             }
-        }>{item.name + item.country + item.state}</div>)
+        }>{item.name + ' ' + item.country + ' ' + item.state}</div>)
     }
+    // useEffect()
     return (
-        <div>{arr}</div>
+        <div className='wrapSity'
+        onClick={(event) => {event.currentTarget.style.display = 'none'}}
+        >{arr}</div>
     )
 }
 
