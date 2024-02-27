@@ -55,7 +55,7 @@ function LocDiv (props) {
                 response.then(response => response.json())
                 .then(va=> {
                     localStorage.setItem('latW', item.lat)
-                    localStorage.setItem('latW', item.lat)
+                    localStorage.setItem('lonW', item.lon)
                     localStorage.setItem('cityW', (item.local_names ? item.local_names.ru : item.name))
                     props.weat.setWeat(va)
                 })
