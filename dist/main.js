@@ -233,7 +233,7 @@ function LocDiv(props) {
             return response.json();
           }).then(function (va) {
             localStorage.setItem('latW', item.lat);
-            localStorage.setItem('latW', item.lat);
+            localStorage.setItem('lonW', item.lon);
             localStorage.setItem('cityW', item.local_names ? item.local_names.ru : item.name);
             props.weat.setWeat(va);
           });
